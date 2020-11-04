@@ -1,0 +1,16 @@
+{
+  "name": "great_bay",
+  "version": "1.0.0",
+  "description": "Upon loading up the program, the user is prompted on whether they would like to \"POST AN ITEM\" or \"BID ON AN ITEM.If the user selects \"POST AN ITEM\" they are prompted for an assortment of information regarding the item and then that information is added to the database so that others can bid on it.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jim and Lucas and Candice",
+  "license": "MIT",
+  "dependencies": {
+    "asciiart-logo": "^0.2.6",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
