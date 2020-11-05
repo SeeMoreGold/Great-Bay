@@ -29,11 +29,12 @@ let init = () => {
         if (answers.bid === "POST AN ITEM") {
             postItem(answers);
         }
-        if (answers.bid === "BID ON AN ITEM") {
+        else if (answers.bid === "BID ON AN ITEM") {
             bidList();
             // bidItem(answers);
-        }
+        } else {
         endConnection();
+        }
     })
 }
 
@@ -54,6 +55,7 @@ function postItem(answers) {
 
     // logs the actual query being run
     console.log(query.sql);
+    endConnection();
 }
 
 function bidList() {

@@ -6,7 +6,7 @@ let prompts = () => {
             type: "list",
             message: "Would you like to:",
             name: "bid",
-            choices: ["POST AN ITEM", "BID ON AN ITEM"]
+            choices: ["POST AN ITEM", "BID ON AN ITEM", "EXIT"]
         },
         {
             type: "input",
