@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
     user: "root",
     // Your password
     password: "1026",
-    database: "playlist_db"
+    database: "great_baydb"
 });
 
 connection.connect(function (err) {
@@ -25,25 +25,30 @@ connection.connect(function (err) {
 });
 
 let init = () => {
-    songPrompts().then((answers) => {
-        createProduct(answers);
+    prompts().then((answers) => {
+        if (answers.bid === "POST AN ITEM") {
+            postItem(answers);
+        }
+        if (answers.bid === "BID ON AN ITEM") {
+            bidList();
+            // bidItem(answers);
+        }
+        endConnection();
     })
 }
 
-function createProduct(answers) {
-    console.log("Inserting a new artist...\n");
+function postItem(answers) {
+    console.log("Inserting a new item...\n");
     var query = connection.query(
-        "INSERT INTO songs SET ?",
+        "INSERT INTO products SET ?",
         {
-            artist: answers.artist,
-            title: answers.title,
-            genre: answers.genre
+            item: answers.item,
+            lastBid: answers.lastBid,
+            quantity: answers.quantity
         },
         function (err, res) {
             if (err) throw err;
             console.log(res.affectedRows + " product inserted!\n");
-            // Call updateProduct AFTER the INSERT completes
-            updateProduct();
         }
     );
 
@@ -51,59 +56,33 @@ function createProduct(answers) {
     console.log(query.sql);
 }
 
-function updateProduct() {
-    console.log("Updating all songs...\n");
-    var query = connection.query(
-        "UPDATE songs SET ? WHERE ?",
-        [
-            {
-                artist: "Beatles"
-            },
-            {
-                genre: "Rock"
-            },
-            {
-                title: "Norwegian Wood"
-            }
-        ],
-        function (err, res) {
-            if (err) throw err;
-            console.log(res.affectedRows + " songs updated!\n");
-            // Call deleteProduct AFTER the UPDATE completes
-            deleteProduct();
-        }
-    );
-
-    // logs the actual query being run
-    console.log(query.sql);
-}
-
-function deleteProduct() {
-    console.log("Deleting all artist...\n");
-    connection.query(
-        "DELETE FROM songs WHERE ?",
-        {
-            artist: "Bob Dylan"
-        },
-        function (err, res) {
-            if (err) throw err;
-            console.log(res.affectedRows + " artist deleted!\n");
-            // Call readProducts AFTER the DELETE completes
-            readProducts();
-        }
-    );
-}
-
-function readProducts() {
-    console.log("Selecting all songs...\n");
-    connection.query("SELECT * FROM songs", function (err, res) {
+function bidList() {
+    console.log("Selecting items...\n");
+    connection.query("SELECT item FROM products", function (err, res) {
         if (err) throw err;
-        // Log all results of the SELECT statement
-        console.log(res);
-        endConnection;
-    });
+
+        var itemArray = [];
+        res.forEach(element => {
+            itemArray.push(element.item);
+        })
+        
+        let itemprompts = (itemArray) => {
+            return inquirer.prompt([
+                {
+                    type: "list",
+                    message: "Choose an item:",
+                    name: "itemChoice",
+                    choices: itemArray
+                }
+
+            ])
+        }
+        itemprompts(itemArray);
+    })
 }
 
-function endConnection() {
-    connection.end();
-}
+
+
+        function endConnection() {
+            connection.end();
+        }
